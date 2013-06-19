@@ -1,14 +1,14 @@
 
 public class ArrayHelper {
-	public static float[] addArrays(float[] array1, float[] array2) {
+	public static float[] addArrays(Object[] array1, Object[] array2) {
 		float[] newArray = new float[array1.length + array2.length];
 		
 		for(int i = 0; i < array1.length; i++) {
-			newArray[i] = array1[i];
+			newArray[i] = (float) array1[i];
 		}
 		
 		for(int i = array1.length; i < array1.length + array2.length; i++) {
-			newArray[i] = array2[i - array1.length];
+			newArray[i] = (float) array2[i - array1.length];
 		}
 		
 		return newArray;

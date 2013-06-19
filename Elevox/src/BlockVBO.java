@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class BlockVBO {
-	public static float[] topVBO(float x, float y, float z, Color color, Random ran) {
+	public static Float[] topVBO(float x, float y, float z, Color color, Random ran) {
 		float[] ranColors = color.getColorWithRandomChange(ran);
 		
-		return new float[] {
+		return new Float[] {
 				0.0f + x, 1.0f + y, 0.0f + z, 0.0f, 1.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 1.0f + y, 1.0f + z, 0.0f, 1.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    1.0f + x, 1.0f + y, 1.0f + z, 0.0f, 1.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
@@ -12,10 +12,10 @@ public class BlockVBO {
 		};
 	}
 	
-	public static float[] bottomVBO(float x, float y, float z, Color color, Random ran) {
+	public static Float[] bottomVBO(float x, float y, float z, Color color, Random ran) {
 		float[] ranColors = color.getColorWithRandomChange(ran);
 		
-		return new float[] {
+		return new Float[] {
 				0.0f + x, 0.0f + y, 0.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 0.0f + y, 1.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    1.0f + x, 0.0f + y, 1.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
@@ -23,10 +23,10 @@ public class BlockVBO {
 		};
 	}
 	
-	public static float[] leftVBO(float x, float y, float z, Color color, Random ran) {
+	public static Float[] leftVBO(float x, float y, float z, Color color, Random ran) {
 		float[] ranColors = color.getColorWithRandomChange(ran);
 		
-		return new float[] {
+		return new Float[] {
 				0.0f + x, 1.0f + y, 0.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 1.0f + y, 1.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 0.0f + y, 1.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
@@ -34,10 +34,10 @@ public class BlockVBO {
 		};
 	}
 	
-	public static float[] rightVBO(float x, float y, float z, Color color, Random ran) {
+	public static Float[] rightVBO(float x, float y, float z, Color color, Random ran) {
 		float[] ranColors = color.getColorWithRandomChange(ran);
 		
-		return new float[] {
+		return new Float[] {
 				1.0f + x, 1.0f + y, 0.0f + z, 1.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    1.0f + x, 1.0f + y, 1.0f + z, 1.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    1.0f + x, 0.0f + y, 1.0f + z, 1.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
@@ -45,10 +45,10 @@ public class BlockVBO {
 		};
 	}
 	
-	public static float[] frontVBO(float x, float y, float z, Color color, Random ran) {
+	public static Float[] frontVBO(float x, float y, float z, Color color, Random ran) {
 		float[] ranColors = color.getColorWithRandomChange(ran);
 		
-		return new float[] {
+		return new Float[] {
 				1.0f + x, 1.0f + y, 0.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 1.0f + y, 0.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 0.0f + y, 0.0f + z, 0.0f, 0.0f, 0.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
@@ -56,10 +56,10 @@ public class BlockVBO {
 		};
 	}
 	
-	public static float[] backVBO(float x, float y, float z, Color color, Random ran) {
+	public static Float[] backVBO(float x, float y, float z, Color color, Random ran) {
 		float[] ranColors = color.getColorWithRandomChange(ran);
 		
-		return new float[] {
+		return new Float[] {
 				1.0f + x, 1.0f + y, 1.0f + z, 0.0f, 0.0f, 1.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 1.0f + y, 1.0f + z, 0.0f, 0.0f, 1.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],
 			    0.0f + x, 0.0f + y, 1.0f + z, 0.0f, 0.0f, 1.0f, ranColors[0], ranColors[1], ranColors[2], ranColors[3],

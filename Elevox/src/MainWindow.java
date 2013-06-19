@@ -1,7 +1,6 @@
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.lwjgl.BufferUtils;
@@ -9,16 +8,11 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.glu.GLU;
-
 
 public class MainWindow {
 	private DisplayMode displayMode;
@@ -33,6 +27,14 @@ public class MainWindow {
 	
 	private World theWorld;
 	
+	public ArrayList<Float> vertexDataArray = new ArrayList<Float>();
+	
+	private Timer timer = new Timer(20.0F);
+
+	private long lastFPS;
+
+	private int fps;
+	
 	public static void main(String[] args) {
 		new MainWindow();
 	}
@@ -42,6 +44,7 @@ public class MainWindow {
 			Display.setFullscreen(false);
 			Display.sync(60);
 			Display.setVSyncEnabled(true);
+			Display.setTitle("FPS: -");
 	        DisplayMode d[] = Display.getAvailableDisplayModes();
 	        for (int i = 0; i < d.length; i++) {
 	            if (d[i].getWidth() == 640
@@ -59,7 +62,9 @@ public class MainWindow {
 		
 		initGL();
 		
-		theWorld.load();
+		lastFPS = getSystemTime(); //set lastFPS to current Time
+		
+		theWorld = World.load("test");
 		
 		getRenderQuads();
 
@@ -93,9 +98,9 @@ public class MainWindow {
             //distance in mouse movement from the last getDY() call.
             dy = Mouse.getDY();
      
-            //controll camera yaw from x movement fromt the mouse
+            //control camera yaw from x movement from the mouse
             camera.yaw(dx * mouseSensitivity);
-            //controll camera pitch from y movement fromt the mouse
+            //control camera pitch from y movement from the mouse
             camera.pitch(dy * mouseSensitivity);
             
             if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
@@ -122,12 +127,16 @@ public class MainWindow {
             // look through the camera before you draw anything
             camera.lookThrough();
             
-//            dx = 0;
-//    		dy = 0;
+			timer.updateTimer();
             
-            run();
-			render();
+			for (int var3 = 0; var3 < this.timer.elapsedTicks; ++var3) {
+                this.run();
+            }
+			
+			this.render();
 
+			this.updateFPS();
+			
 			Display.sync(60);
 			Display.update();
 		}
@@ -157,7 +166,7 @@ public class MainWindow {
 //
 //	    GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
 //	    GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 25.0f);
-
+//
 //	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, floatBuffer(-5.0f, 5.0f, 15.0f, 0.0f));
 //
 //	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
@@ -174,11 +183,21 @@ public class MainWindow {
 	    GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	    GL11.glLoadIdentity();
 	    
-        GL11.glEnable(GL11.GL_TEXTURE_2D);              
-        GL11.glClearDepth(1.0f);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	    
+//        GL11.glEnable(GL11.GL_TEXTURE_2D);              
+//        GL11.glClearDepth(1.0f);
+//        GL11.glEnable(GL11.GL_DEPTH_TEST);
+//        GL11.glDepthFunc(GL11.GL_LEQUAL);
+//        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+
+        GL11.glViewport(0,0,displayMode.getWidth(),displayMode.getHeight());
+        
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, 1, -1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
 	
 	public FloatBuffer floatBuffer(float a, float b, float c, float d) {
@@ -197,13 +216,33 @@ public class MainWindow {
 		    vertex_buffer_id = buffer.get(0);
 		}
 		
-		FloatBuffer vertex_buffer_data = BufferUtils.createFloatBuffer();
-	    vertex_buffer_data.put(ArrayHelper.addArrays(vertex_data_array, BlockVBO.topVBO(1.0f, 0.0f, 0.0f, new Color(1.0f, 0.0f, 0.0f, 1.0f), new Random())));
+		FloatBuffer vertex_buffer_data = BufferUtils.createFloatBuffer(ArrayHelper.addArrays(vertexDataArray.toArray(new Float[0]), BlockVBO.topVBO(1.0f, 0.0f, 0.0f, new Color(1.0f, 0.0f, 0.0f, 1.0f), new Random())).length);
+	    vertex_buffer_data.put(ArrayHelper.addArrays(vertexDataArray.toArray(new Float[0]), BlockVBO.topVBO(1.0f, 0.0f, 0.0f, new Color(1.0f, 0.0f, 0.0f, 1.0f), new Random())));
 	    vertex_buffer_data.rewind();
 
 	    GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertex_buffer_id);
 	    GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertex_buffer_data, GL15.GL_DYNAMIC_DRAW);
 	}
+
+    /**
+     * Gets the system time in milliseconds.
+     */
+    public static long getSystemTime()
+    {
+        return Sys.getTime() * 1000L / Sys.getTimerResolution();
+    }
+    	 
+    /**
+     * Calculate the FPS and set it in the title bar
+     */
+    public void updateFPS() {
+    	if (getSystemTime() - lastFPS > 1000) {
+	    	Display.setTitle("FPS: " + fps);
+	    	fps = 0; //reset the FPS counter
+	    	lastFPS += 1000; //add one second
+    	}
+    	fps++;
+    }
 	
 	private void render() {
 		GL11.glTranslatef(0, -2f, 0);
@@ -222,5 +261,10 @@ public class MainWindow {
 
 	    // restore the matrix to pre-transformation values
 	    GL11.glPopMatrix();
+
+		org.newdawn.slick.opengl.TextureImpl.unbind();
+	    org.newdawn.slick.Color.white.bind();
+	    
+	    FontRenderer.drawString(20, 20, "LOL", org.newdawn.slick.Color.red);
 	}
 }
