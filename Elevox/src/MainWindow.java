@@ -17,11 +17,11 @@ import org.lwjgl.util.glu.GLU;
 public class MainWindow {
 	private DisplayMode displayMode;
 	
-	private int mouseX = 0;
-	private int mouseY = 0;
-	private boolean rightMouseDown = false;
-	private boolean leftMouseDown = false;
-	private boolean mouseOnWindow = false;
+	public int mouseX = 0;
+	public int mouseY = 0;
+	public boolean rightMouseDown = false;
+	public boolean leftMouseDown = false;
+	public boolean mouseOnWindow = false;
 
 	private int vertex_buffer_id;
 	
@@ -34,6 +34,11 @@ public class MainWindow {
 	private long lastFPS;
 
 	private int fps;
+	
+	public static Gui gui;
+
+	public int width = 800;
+	public int height = 600;
 	
 	public static void main(String[] args) {
 		new MainWindow();
@@ -59,6 +64,9 @@ public class MainWindow {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
+		
+		gui = new Gui(this);
+		gui.setActualGui(new GuiMainMenu(this));
 		
 		initGL();
 		
@@ -129,11 +137,16 @@ public class MainWindow {
             
 			timer.updateTimer();
             
+			gui.run();
+			
 			for (int var3 = 0; var3 < this.timer.elapsedTicks; ++var3) {
                 this.run();
             }
 			
 			this.render();
+			enterOrtho();
+			gui.render();
+			leaveOrtho();
 
 			this.updateFPS();
 			
@@ -161,18 +174,18 @@ public class MainWindow {
 	    GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 
 	    // set up lighting
-//	    GL11.glEnable(GL11.GL_LIGHTING);
-//	    GL11.glEnable(GL11.GL_LIGHT0);
-//
-//	    GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
-//	    GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 25.0f);
-//
-//	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, floatBuffer(-5.0f, 5.0f, 15.0f, 0.0f));
-//
-//	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
-//	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
-//
-//	    GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, floatBuffer(0.1f, 0.1f, 0.1f, 1.0f));
+	    GL11.glEnable(GL11.GL_LIGHTING);
+	    GL11.glEnable(GL11.GL_LIGHT0);
+
+	    GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
+	    GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 25.0f);
+
+	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, floatBuffer(-5.0f, 5.0f, 15.0f, 0.0f));
+
+	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
+	    GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, floatBuffer(1.0f, 1.0f, 1.0f, 1.0f));
+
+	    GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, floatBuffer(0.1f, 0.1f, 0.1f, 1.0f));
 
 	    // set up the camera
 	    GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -186,18 +199,11 @@ public class MainWindow {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	    
-//        GL11.glEnable(GL11.GL_TEXTURE_2D);              
-//        GL11.glClearDepth(1.0f);
-//        GL11.glEnable(GL11.GL_DEPTH_TEST);
-//        GL11.glDepthFunc(GL11.GL_LEQUAL);
-//        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
-
-        GL11.glViewport(0,0,displayMode.getWidth(),displayMode.getHeight());
-        
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0, displayMode.getWidth(), displayMode.getHeight(), 0, 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);              
+        GL11.glClearDepth(1.0f);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
     }
 	
 	public FloatBuffer floatBuffer(float a, float b, float c, float d) {
@@ -243,6 +249,31 @@ public class MainWindow {
     	}
     	fps++;
     }
+    
+    public static void enterOrtho() {
+		// store the current state of the renderer
+		GL11.glPushAttrib(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_ENABLE_BIT);
+		GL11.glPushMatrix();
+		GL11.glLoadIdentity();
+		GL11.glMatrixMode(GL11.GL_PROJECTION); 
+		GL11.glPushMatrix();
+			
+		// now enter orthographic projection
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, 800, 600, 0, -1, 1);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_LIGHTING);
+	}
+
+	public static void leaveOrtho() {
+		// restore the state of the renderer
+		GL11.glPopMatrix();
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glPopMatrix();
+		GL11.glPopAttrib();
+	}
 	
 	private void render() {
 		GL11.glTranslatef(0, -2f, 0);
@@ -261,10 +292,5 @@ public class MainWindow {
 
 	    // restore the matrix to pre-transformation values
 	    GL11.glPopMatrix();
-
-		org.newdawn.slick.opengl.TextureImpl.unbind();
-	    org.newdawn.slick.Color.white.bind();
-	    
-	    FontRenderer.drawString(20, 20, "LOL", org.newdawn.slick.Color.red);
 	}
 }

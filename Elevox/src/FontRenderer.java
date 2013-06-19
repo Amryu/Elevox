@@ -4,7 +4,7 @@ import org.newdawn.slick.TrueTypeFont;
 import java.awt.Font;
 
 public class FontRenderer {
-	private static TrueTypeFont font = new TrueTypeFont(new Font("Arial", Font.PLAIN, 24), true);
+	private static TrueTypeFont font = new TrueTypeFont(new Font("Comic Sans MS", Font.PLAIN, 50), true);
 	
 	public static void drawString(int x, int y, String text) {
 		org.newdawn.slick.opengl.TextureImpl.unbind();
