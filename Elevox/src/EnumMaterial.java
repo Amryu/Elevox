@@ -1,6 +1,7 @@
 
 public enum EnumMaterial {
-	dirt();
+	dirt(),
+	gas();
 	
 	private EnumMaterial() {
 		

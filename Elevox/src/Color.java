@@ -16,7 +16,7 @@ public class Color {
 		float g = this.g;
 		float b = this.b;
 		
-		float ranModifier = (float) ran.nextInt(21) / 100.0f - 0.1f;
+		float ranModifier = (float) ran.nextInt(11) / 100.0f - 0.1f;
 		
 		r += ranModifier;
 		g += ranModifier;

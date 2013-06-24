@@ -1,6 +1,6 @@
 
 public class ArrayHelper {
-	public static float[] addArrays(Object[] array1, Object[] array2) {
+	public static float[] addArrays(float[] array1, float[] array2) {
 		float[] newArray = new float[array1.length + array2.length];
 		
 		for(int i = 0; i < array1.length; i++) {

@@ -7,8 +7,8 @@ import java.io.IOException;
 
 
 public class Options {
-	// lade 5 Chunks in jede Richtung
-	public static int viewDistance = 5;
+	// lade 3 Chunks in jede Richtung
+	public static int viewDistance = 3;
 	
 	// Die Sprache
 	public static String language = "de_de";
@@ -30,6 +30,8 @@ public class Options {
 			bw.append("# it will be resetted!\n");
 			bw.append("viewDistance="+viewDistance+"\n");
 			bw.append("language="+language+"\n");
+			
+			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,6 +53,8 @@ public class Options {
 					Options.language = line.split("=")[1];
 				}
 			}
+			
+			br.close();
 		} catch (Exception e) {
 			saveOptions();
 		}

@@ -1,7 +1,10 @@
 
 public class Block {
 	// Definierte Blöcke
-	private static Block[] blockList = new Block[256];
+	public static Block[] blockList = new Block[256];
+	
+	public static final Block AIR = new Block(0, EnumMaterial.gas);
+	public static final Block GRASS = new Block(1, EnumMaterial.dirt);
 	
 	// Blockeigenschaften
 	private final int id;
@@ -16,6 +19,8 @@ public class Block {
 		
 		this.id = id;
 		this.material = material;
+		
+		blockList[id] = this;
 	}
 	
 	private Block setName(String name) {

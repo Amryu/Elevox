@@ -1,0 +1,4 @@
+# Don´t try to edit this file manually. If it fails
+# it will be resetted!
+viewDistance=5
+language=de_de
