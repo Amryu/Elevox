@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
@@ -83,7 +84,6 @@ public class Chunk {
 		if(this.isReadyToDraw()) {
 			if(refillBuffer) {
 				refillBuffer = false;
-				
 				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBufferId);
 			    GL15.glBufferData(GL15.GL_ARRAY_BUFFER, getVBOData(), GL15.GL_DYNAMIC_DRAW);
 			}

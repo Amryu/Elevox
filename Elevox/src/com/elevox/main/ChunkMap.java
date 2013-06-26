@@ -97,9 +97,7 @@ public class ChunkMap implements Runnable {
 	}
 
 	private void generateChunk(int posX, int posZ, long seed) {
-		long time = Sys.getTime();
 		Block[][][] blocks = moon.generate(world, posX * 16, posZ * 16);
-		System.out.println(Sys.getTime() -time);
 //		for(int x = 0; x < Chunk.CHUNK_WIDTH; x++) {
 //			for(int y = 0; y < Chunk.CHUNK_HEIGHT; y++) {
 //				for(int z = 0; z < Chunk.CHUNK_DEPTH; z++) {
@@ -183,7 +181,7 @@ public class ChunkMap implements Runnable {
 			int i = 0;
 			for(int y = 0; y < Chunk.CHUNK_HEIGHT; y++) {
 				for(int z = 0; z < Chunk.CHUNK_DEPTH; z++) {
-					data[x][i] = (byte) chunk.getBlockAt(x, y, z).getID();
+					data[x][i] = chunk.getBlockAt(x, y, z).getID();
 					i++;
 				}
 			}

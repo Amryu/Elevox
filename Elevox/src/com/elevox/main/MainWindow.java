@@ -146,7 +146,7 @@ public class MainWindow {
 			for (int var3 = 0; var3 < this.timer.elapsedTicks; ++var3) {
                 this.run();
             }
-
+			
 			this.render();
 			enterOrtho();
 			gui.render();
